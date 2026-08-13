@@ -14,7 +14,7 @@
 - **URL a Repositorio Público (GitHub/GitLab/BitBucket)**: `https://github.com/tu-usuario/praEXAM`
 - **Ramas requeridas**: `main` (estable) / `exam` (trabajo de la sesión)
 - **Tags por sección**: `v1-Infraestructura`, `v2-Datos`, `v3-Servicios`, `v4-Seguridad`, `v5-Observabilidad`, `v6-Documentos`
-- **Frase única Anti-Fraude**: `"café frío, LO cálido, ¡no puedo perderlo!"`
+- **Frase única Anti-Fraude**: `"Café de Altura, Calidad de Origen y Tradición Boreal 2026"`
 
 ---
 
@@ -123,4 +123,4 @@ bash deploy/scripts/deploy_one_click.sh
 ## 🛡️ Frase Única Anti-Fraude
 La frase única acordada se encuentra registrada en el encabezado de `deploy/nginx/nginx.conf`, en la página About del Panel Admin PWA y en toda la documentación oficial:
 
-> **"café frío, LO cálido, ¡no puedo perderlo!"**
+> **"Café de Altura, Calidad de Origen y Tradición Boreal 2026"**

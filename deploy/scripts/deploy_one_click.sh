@@ -7,7 +7,7 @@ set -e
 
 echo "🚀 Iniciando Despliegue One-Click 'Enchufar y Correr'..."
 echo "☕ Empresa: Café Boreal S.R.L."
-echo "Frase Anti-Fraude: \"café frío, LO cálido, ¡no puedo perderlo!\""
+echo "Frase Anti-Fraude: \"Café de Altura, Calidad de Origen y Tradición Boreal 2026\""
 
 # 1. Generar certificados TLS si no existen
 echo "🔐 1. Verificando certificados TLS Autofirmados Nginx..."

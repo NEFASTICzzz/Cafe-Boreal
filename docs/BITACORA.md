@@ -37,4 +37,4 @@
   - *Output*: `1 | María Rodríguez Fonseca | 3a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d:8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a`
 
 - **Frase Única Anti-Fraude en Sistema**:
-  `"café frío, LO cálido, ¡no puedo perderlo!"`
+  `"Café de Altura, Calidad de Origen y Tradición Boreal 2026"`
