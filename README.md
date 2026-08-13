@@ -8,10 +8,10 @@
 
 - **Modalidad**: Parejas (Entregable: VM única VirtualBox "enchufar y correr" `.ova`)
 - **Fecha Completa**: 13 de Agosto de 2026
-- **Nombre Completo Profesor**: ____________________________________________________
-- **Nombre Completo Estudiante 1**: ________________________________________________
-- **Nombre Completo Estudiante 2**: ________________________________________________
-- **URL a Repositorio Público (GitHub/GitLab/BitBucket)**: `https://github.com/tu-usuario/praEXAM`
+- **Nombre Completo Profesor**: Andres Jimenez Leandro
+- **Nombre Completo Estudiante 1**: Dylan Cerda Cortes
+- **Nombre Completo Estudiante 2**: Dylan Sanabria Hidalgo
+- **URL a Repositorio Público (GitHub/GitLab/BitBucket)**: `https://github.com/NEFASTICzzz/Cafe-Boreal`
 - **Ramas requeridas**: `main` (estable) / `exam` (trabajo de la sesión)
 - **Tags por sección**: `v1-Infraestructura`, `v2-Datos`, `v3-Servicios`, `v4-Seguridad`, `v5-Observabilidad`, `v6-Documentos`
 - **Frase única Anti-Fraude**: `"Café de Altura, Calidad de Origen y Tradición Boreal 2026"`
