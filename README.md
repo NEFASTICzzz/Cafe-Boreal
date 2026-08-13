@@ -6,7 +6,7 @@
 
 ### Datos de la Entrega
 
-- **Modalidad**: Parejas (Entregable: VM única "enchufar y correr")
+- **Modalidad**: Parejas (Entregable: VM única VirtualBox "enchufar y correr" `.ova`)
 - **Fecha Completa**: 13 de Agosto de 2026
 - **Nombre Completo Profesor**: ____________________________________________________
 - **Nombre Completo Estudiante 1**: ________________________________________________
@@ -20,7 +20,7 @@
 
 ## ☕ Resumen Ejecutivo del Proyecto
 
-Este repositorio contiene la solución técnica integral y reproducible para la plataforma cloud-native e integradora de **Café Boreal S.R.L.** El sistema opera localmente dentro de una VM única (Ubuntu Server 22.04 LTS / Debian 12 o Windows Server) mediante orquestación en **Kubernetes / Docker Compose**.
+Este repositorio contiene la solución técnica integral y reproducible para la plataforma cloud-native e integradora de **Café Boreal S.R.L.** El sistema opera localmente dentro de una VM única en **VirtualBox** (Ubuntu Server 22.04 LTS) mediante orquestación en **Kubernetes / Docker Compose**.
 
 ### Componentes Clave:
 1. **Front-End PWA Responsive**: Panel Admin mobile-first en HTML5/CSS3/JS para gestión de catálogo, pedidos, clientes y consulta al sistema legado.

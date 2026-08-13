@@ -37,12 +37,12 @@ graph TD
 
 ---
 
-## 2. Diagrama de Despliegue (Infraestructura de VM Única)
+## 2. Diagrama de Despliegue (Infraestructura VirtualBox VM)
 
 ```mermaid
 graph LR
-    subgraph "Hyper-V / VirtualBox / VMware VM (Ubuntu Server 22.04 LTS)"
-        subgraph "Network: Host/Bridge Interface"
+    subgraph "Oracle VM VirtualBox (Ubuntu Server 22.04 LTS)"
+        subgraph "VirtualBox Network: NAT Port Forwarding / Bridged"
             Port80[Port 80: HTTP Redirect]
             Port443[Port 443: HTTPS SSL]
             Port5555[Port 5555: Grafana]

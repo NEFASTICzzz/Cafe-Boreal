@@ -4,20 +4,22 @@ Este documento contiene los procedimientos operativos estándar para el arranque
 
 ---
 
-## 1. Procedimiento de Arranque Inicial ("Enchufar y Correr")
+## 1. Procedimiento de Arranque Inicial en Oracle VM VirtualBox ("Enchufar y Correr")
 
-1. Importar la VM (VHDX / OVA / VMDK) en Hyper-V / VirtualBox / VMware.
-2. Configurar los recursos asignados a la VM:
+1. Importar la VM `.ova` (`CafeBoreal_VM_Entrega.ova`) en Oracle VM VirtualBox:
+   - Menú `Archivo` -> `Importar servicio virtual...` -> Seleccionar el archivo `.ova`.
+2. Configurar o verificar los recursos asignados a la VM:
    - **vCPU**: 4 núcleos
-   - **RAM**: 12 GB
+   - **RAM**: 12 GB (Mínimo 8 GB)
    - **Disco**: 80 GB
+   - **Red**: Adaptador NAT con Reenvío de Puertos (Ports: 80->80, 443->443, 5555->5555, 2222->22) o Adaptador Puente (Bridged).
 3. Encender la VM e iniciar sesión (Usuario: `boreal`, Password: `boreal_password_2026`).
 4. Abrir la terminal dentro de la VM y ejecutar el script one-click:
    ```bash
    cd /home/boreal/praEXAM
    bash deploy/scripts/deploy_one_click.sh
    ```
-5. Verificar el acceso en navegador:
+5. Verificar el acceso en navegador (Host / VM):
    - **Front-End PWA**: `https://localhost/`
    - **Dashboard Grafana**: `http://localhost:5555`
 
