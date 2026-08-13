@@ -17,7 +17,11 @@ fi
 
 # 2. Levantar Entorno mediante Docker Compose / K8s Local
 echo "🐳 2. Desplegando Contenedores y Servicios (Orquestación local)..."
-docker-compose up -d --build
+if command -v docker-compose &> /dev/null; then
+    docker-compose up -d --build
+else
+    docker compose up -d --build
+fi
 
 echo "⏳ Esperando 10 segundos a la inicializacion de contenedores..."
 sleep 10
