@@ -1,0 +1,82 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "CPU Usage per Container / Pod (cAdvisor)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "rate(container_cpu_usage_seconds_total{name=~\".+\"}[1m])",
+          "legendFormat": "{{name}}"
+        }
+      ]
+    },
+    {
+      "title": "Memory Usage per Container / Pod (Bytes)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "container_memory_usage_bytes{name=~\".+\"}",
+          "legendFormat": "{{name}}"
+        }
+      ]
+    },
+    {
+      "title": "HTTP Error Rates & Status Code Counter",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m]))",
+          "legendFormat": "5xx Server Errors"
+        }
+      ]
+    },
+    {
+      "title": "p95 Latency Distribution (ms)",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) * 1000",
+          "legendFormat": "p95 Latency (ms)"
+        }
+      ]
+    },
+    {
+      "title": "Loki Logs Viewer (Query by Container Label)",
+      "type": "logs",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 14 },
+      "targets": [
+        {
+          "datasource": "Loki",
+          "expr": "{job=\"docker_containers\"}"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["boreal", "observability", "utn"],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "Café Boreal S.R.L. - Dashboard de Observabilidad Integrado",
+  "uid": "boreal-observability-v1"
+}
