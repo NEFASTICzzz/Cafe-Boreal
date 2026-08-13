@@ -1,0 +1,137 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: boreal-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: boreal_user
+      POSTGRES_PASSWORD: boreal_pass_256bit_secure
+      POSTGRES_DB: boreal_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/seed/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+
+  catalog-api:
+    build: ./source/apis/catalog-api
+    container_name: boreal-catalog-api
+    restart: always
+    environment:
+      PORT: 3001
+      DB_HOST: postgres
+      DB_USER: boreal_user
+      DB_PASSWORD: boreal_pass_256bit_secure
+      DB_NAME: boreal_db
+    depends_on:
+      - postgres
+
+  orders-api:
+    build: ./source/apis/orders-api
+    container_name: boreal-orders-api
+    restart: always
+    environment:
+      PORT: 3002
+      DB_HOST: postgres
+      DB_USER: boreal_user
+      DB_PASSWORD: boreal_pass_256bit_secure
+      DB_NAME: boreal_db
+    depends_on:
+      - postgres
+
+  customers-api:
+    build: ./source/apis/customers-api
+    container_name: boreal-customers-api
+    restart: always
+    environment:
+      PORT: 3003
+      DB_HOST: postgres
+      DB_USER: boreal_user
+      DB_PASSWORD: boreal_pass_256bit_secure
+      DB_NAME: boreal_db
+      ENCRYPTION_KEY: "boreal_secret_key_256bit_32B_len!"
+    depends_on:
+      - postgres
+
+  legacy-app:
+    build: ./source/legacy
+    container_name: boreal-legacy-app
+    restart: always
+
+  frontend-app:
+    build: ./source/frontend
+    container_name: boreal-frontend-app
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: boreal-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - catalog-api
+      - orders-api
+      - customers-api
+      - legacy-app
+      - frontend-app
+
+  # Observabilidad
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: boreal-prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/observability/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: boreal-cadvisor
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: boreal-loki
+    restart: always
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./deploy/observability/loki-config.yml:/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: boreal-promtail
+    restart: always
+    volumes:
+      - ./deploy/observability/promtail-config.yml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: boreal-grafana
+    restart: always
+    ports:
+      - "5555:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=boreal2026
+    depends_on:
+      - prometheus
+      - loki
+
+volumes:
+  postgres_data:

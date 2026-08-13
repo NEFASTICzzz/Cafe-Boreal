@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Café Boreal S.R.L. - Admin Panel & PWA</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#3b2314">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">☕</span>
+        <div>
+          <h1>Café Boreal S.R.L.</h1>
+          <span class="subtitle">Panel Integrador de Gestión | ITI-522</span>
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="dot online"></span> K8s Cluster Ready
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="catalog">📦 Catálogo</button>
+      <button class="tab-btn" data-tab="orders">🛒 Pedidos</button>
+      <button class="tab-btn" data-tab="customers">👥 Clientes (AES-256)</button>
+      <button class="tab-btn" data-tab="legacy">📜 Inventario Legado</button>
+      <button class="tab-btn" data-tab="about">🛡️ Anti-Fraude & Info</button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content">
+      <!-- Section: Catalog -->
+      <section id="tab-catalog" class="tab-content active">
+        <div class="section-header">
+          <h2>Gestión de Catálogo de Productos</h2>
+          <button class="btn btn-primary" onclick="openProductModal()">+ Nuevo Producto</button>
+        </div>
+        <div class="card-grid" id="catalog-list">
+          <div class="loading-spinner">Cargando productos...</div>
+        </div>
+      </section>
+
+      <!-- Section: Orders -->
+      <section id="tab-orders" class="tab-content">
+        <div class="section-header">
+          <h2>Gestión de Pedidos</h2>
+          <button class="btn btn-primary" onclick="openOrderModal()">+ Crear Pedido</button>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID Pedido</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Subtotal</th>
+                <th>IVA (13%)</th>
+                <th>Total</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="orders-list">
+              <tr><td colspan="7">Cargando pedidos...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: Customers -->
+      <section id="tab-customers" class="tab-content">
+        <div class="section-header">
+          <h2>Clientes (Cifrado de Identidad en Almacenamiento)</h2>
+          <button class="btn btn-primary" onclick="openCustomerModal()">+ Registrar Cliente</button>
+        </div>
+        <div class="security-banner">
+          🔒 <strong>Seguridad AES-256 Activa:</strong> Los números de cédula/identidad se guardan cifrados en base de datos. La API y la interfaz los muestran desencriptados en claro. 
+          <button class="btn btn-sm btn-outline" onclick="fetchRawEncryptedCustomers()">Ver SELECT Cifrado en BD (Raw)</button>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre Completo</th>
+                <th>Email</th>
+                <th>Cédula / Identidad (En Claro)</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="customers-list">
+              <tr><td colspan="5">Cargando clientes...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="raw-encrypted-modal" class="modal">
+          <div class="modal-content">
+            <span class="close-btn" onclick="closeRawModal()">&times;</span>
+            <h3>SELECT Directo a BD (Ciphertext AES-256)</h3>
+            <p>Demostración de almacenamiento cifrado en la capa de datos:</p>
+            <pre id="raw-encrypted-code"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Legacy -->
+      <section id="tab-legacy" class="tab-content">
+        <div class="section-header">
+          <h2>Consulta de Inventario Legado (XAMPP/LAMPP /legacy/inventory)</h2>
+        </div>
+        <div class="legacy-filter">
+          <input type="text" id="legacy-sku-input" placeholder="Buscar por SKU (ej. SKU-TAR-001) o ID..." class="form-input">
+          <button class="btn btn-secondary" onclick="fetchLegacyInventory()">Consultar Inventario Legado</button>
+        </div>
+        <div class="table-container" style="margin-top: 1rem;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>ID Prod</th>
+                <th>Nombre en Legado</th>
+                <th>Stock Físico (Bodega)</th>
+                <th>Ubicación</th>
+                <th>Última Sincronización</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="legacy-list">
+              <tr><td colspan="7">Haga clic en consultar para obtener inventario del sistema legado...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section: About & Anti-Fraud -->
+      <section id="tab-about" class="tab-content">
+        <div class="about-card">
+          <h2>Verificación Anti-Fraude & Detalles del Examen</h2>
+          <div class="anti-fraud-box">
+            <span class="badge-tag">Frase Única Anti-Fraude</span>
+            <p class="anti-fraud-phrase" id="anti-fraud-text">"café frío, LO cálido, ¡no puedo perderlo!"</p>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <strong>Institución:</strong> Universidad Técnica Nacional (UTN)
+            </div>
+            <div class="info-item">
+              <strong>Curso:</strong> ITI-522 Computación en la Nube
+            </div>
+            <div class="info-item">
+              <strong>Caso Empresarial:</strong> Café Boreal S.R.L.
+            </div>
+            <div class="info-item">
+              <strong>Entregable:</strong> VM Única "Enchufar y Correr" (Hyper-V / VirtualBox)
+            </div>
+          </div>
+
+          <h3>Verificación de Endpoints de Salud (/healthz)</h3>
+          <div class="health-buttons">
+            <button class="btn btn-sm btn-outline" onclick="checkHealth('/api/catalog/healthz')">Catalog Healthz</button>
+            <button class="btn btn-sm btn-outline" onclick="checkHealth('/api/orders/healthz')">Orders Healthz</button>
+            <button class="btn btn-sm btn-outline" onclick="checkHealth('/api/customers/healthz')">Customers Healthz</button>
+            <button class="btn btn-sm btn-outline" onclick="checkHealth('/legacy/healthz')">Legacy Healthz</button>
+          </div>
+          <pre id="health-output" class="console-box">Presione un botón para verificar el estado de salud de cada microservicio...</pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal para Crear/Editar Producto -->
+  <div id="product-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeProductModal()">&times;</span>
+      <h3 id="product-modal-title">Nuevo Producto</h3>
+      <form id="product-form" onsubmit="saveProduct(event)">
+        <input type="hidden" id="prod-id">
+        <div class="form-group">
+          <label>Nombre del Producto</label>
+          <input type="text" id="prod-name" class="form-input" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio (₡)</label>
+            <input type="number" id="prod-price" class="form-input" required min="0">
+          </div>
+          <div class="form-group">
+            <label>Stock</label>
+            <input type="number" id="prod-stock" class="form-input" required min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="prod-desc" class="form-input" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>URL Imagen</label>
+          <input type="url" id="prod-image" class="form-input" placeholder="https://images.unsplash.com/...">
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Guardar Producto</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para Crear Cliente -->
+  <div id="customer-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeCustomerModal()">&times;</span>
+      <h3>Registrar Nuevo Cliente</h3>
+      <form id="customer-form" onsubmit="saveCustomer(event)">
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" id="cust-name" class="form-input" required placeholder="Ej: María Rodríguez">
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="cust-email" class="form-input" required placeholder="ejemplo@boreal.cr">
+        </div>
+        <div class="form-group">
+          <label>Número de Identidad / Cédula (Se cifrará con AES-256 en BD)</label>
+          <input type="text" id="cust-identity" class="form-input" required placeholder="Ej: 101110222">
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Guardar Cliente (Cifrado Automático)</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(reg => console.log('PWA ServiceWorker registrado')).catch(err => console.log('SW err:', err));
+    }
+  </script>
+</body>
+</html>
