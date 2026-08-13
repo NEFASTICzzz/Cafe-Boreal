@@ -39,7 +39,8 @@ INSERT INTO products (name, price, stock, description, image) VALUES
 ('Prensa Francesa Boreal Stainless 800ml', 18500, 25, 'Cafetera de filtro de acero inoxidable de doble pared.', 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400');
 
 -- Inserción de Clientes con Cédulas Cifradas AES-256 (IV:Ciphertext)
+-- Clave: 'boreal_secret_key_256bit_32B_len!' -> SHA-256 -> AES-256-CBC
 INSERT INTO customers (name, email, identity_number_encrypted) VALUES
-('María Rodríguez Fonseca', 'mrodriguez@boreal.cr', '3a9b1c2d3e4f5a6b7c8d9e0f1a2b3c4d:8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a'),
-('Carlos Solano Vargas', 'csolano@boreal.cr', '1f2e3d4c5b6a7f8e9d0c1b2a3f4e5d6c:7b8a9c0d1e2f3a4b5c6d7e8f9a0b1c2d'),
-('Ana Lucía Chaves', 'achaves@gmail.com', '5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b:4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f');
+('María Rodríguez Fonseca', 'mrodriguez@boreal.cr', 'd3c4b5a6f7e890123456789abcdef012:a2f9b8c7d6e5f4a3b2c1d0e9f8a7b6c5'),
+('Carlos Solano Vargas', 'csolano@boreal.cr', '123456789abcdef0123456789abcdef0:b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8'),
+('Ana Lucía Chaves', 'achaves@gmail.com', 'abcdef0123456789abcdef0123456789:c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9');

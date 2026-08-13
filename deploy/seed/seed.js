@@ -17,7 +17,7 @@ function encryptIdentity(text) {
 }
 
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || 'postgres',
   port: process.env.DB_PORT || 5432,
   user: process.env.DB_USER || 'boreal_user',
   password: process.env.DB_PASSWORD || 'boreal_pass_256bit_secure',
@@ -29,7 +29,6 @@ async function runSeed() {
   const pool = new Pool(dbConfig);
 
   try {
-    // 1. Crear Tablas si no existen
     await pool.query(`
       CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
@@ -61,9 +60,7 @@ async function runSeed() {
       );
     `);
 
-    console.log('✅ Tablas verificadas/creadas.');
-
-    // 2. Insertar 52 Productos (≥50 requeridos)
+    // 52 Productos
     const productCategories = ['Café de Origen', 'Mezclas Especiales', 'Equipamiento', 'Accesorios', 'Insumos'];
     const regions = ['Tarrazú', 'Poás', 'Tres Ríos', 'Orosi', 'Brunca', 'Naranjo'];
 
@@ -85,7 +82,7 @@ async function runSeed() {
     }
     console.log('✅ 52 Productos insertados correctamente.');
 
-    // 3. Insertar 12 Clientes (≥10 requeridos) con Identidad Encriptada
+    // 12 Clientes con Cédulas Cifradas dinámicamente con AES-256
     await pool.query('TRUNCATE TABLE customers RESTART IDENTITY CASCADE');
 
     const sampleCustomers = [
@@ -111,8 +108,6 @@ async function runSeed() {
       );
     }
     console.log('✅ 12 Clientes insertados con número de cédula encriptado en AES-256.');
-
-    console.log('🎉 Seed completado exitosamente.');
   } catch (err) {
     console.error('❌ Error ejecutando el seed:', err);
   } finally {
