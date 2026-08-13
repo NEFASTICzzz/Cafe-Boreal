@@ -1,5 +1,6 @@
 FROM php:8.2-apache
 RUN a2enmod rewrite
+COPY .htaccess /var/www/html/.htaccess
 COPY index.php /var/www/html/index.php
 RUN chmod -R 755 /var/www/html
 EXPOSE 80

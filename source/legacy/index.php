@@ -6,10 +6,10 @@ header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = $_SERVER['REQUEST_URI'] ?? '';
 
 // Healthcheck endpoint
-if ($uri === '/legacy/healthz' || $uri === '/legacy/inventory/healthz') {
+if (strpos($uri, 'healthz') !== false) {
     echo json_encode([
         'status' => 'ok',
         'system' => 'Legacy Apache/PHP Inventory Engine v1.0',
@@ -18,7 +18,7 @@ if ($uri === '/legacy/healthz' || $uri === '/legacy/inventory/healthz') {
     exit;
 }
 
-// Datos de inventario legado (simulación DB SQLite / MariaDB Legada)
+// Datos de inventario legado (simulacion DB SQLite / MariaDB Legada)
 $legacyInventory = [
     [
         'sku' => 'SKU-TAR-001',
@@ -67,7 +67,6 @@ $legacyInventory = [
     ]
 ];
 
-// Filtro por SKU si se proporciona
 $skuParam = isset($_GET['sku']) ? trim($_GET['sku']) : null;
 
 if ($skuParam) {
@@ -94,7 +93,6 @@ if ($skuParam) {
     exit;
 }
 
-// Retorna la lista completa
 echo json_encode([
     'success' => true,
     'source' => 'XAMPP/LAMPP Legacy DB',
